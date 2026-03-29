@@ -151,6 +151,7 @@ export const deleteTask = async (req, res) => {
         res.status(200).json({ message: 'Task deleted successfully!' })
     } catch (error) {
         console.log('Error at delete task: ', error.message)
-        res.status(500).json({ message: 'Something went wrong! try again later' })
+        // res.status(500).json({ message: 'Something went wrong! try again later' })
+        res.status(500).json({ message: error.message })
     }
 }
