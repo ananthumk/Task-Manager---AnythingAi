@@ -17,6 +17,7 @@ export const addTask = async (req, res) => {
 
 
         if (dueDate && !validateDueDate(dueDate)) {
+            console.log('POST /api/v1/tasks -> 400 Bad Request (Invalid due date)')
             return res.status(400).json({ message: 'Dur Date cannot be lesss than today' })
         }
 
@@ -28,7 +29,8 @@ export const addTask = async (req, res) => {
             dueDate,
             userId: req.user.id
         })
-
+        
+        console.log('POST /api/v1/tasks -> 201 Created')
         res.status(200).json({ message: 'Task created successfully' }, task)
     } catch (error) {
         console.log('Error at add Task: ', error.message)
@@ -58,16 +60,20 @@ export const getAllTasks = async (req, res) => {
         
         const totalTask = await Task.countDocuments(filter)
 
-
+        
         const tasks = await Task.find(filter)
         .skip(skip).limit(limit).sort({createdAt: -1})
+
+
+        console.log('GET /api/v1/tasks -> 200 OK')
+
         res.status(200).json({tasks,
             totalPages: Math.ceil(totalTask / limit),
             currentPage: pageNum,
             totalTask
         })
     } catch (error) {
-        console.log('Error at get all tasks: ', error.message)
+        console.log('GET /api/tasks -> 500 ERROR:', error.message)
         res.status(500).json({ message: 'Something went wrong! try again later' })
     }
 }
@@ -80,6 +86,7 @@ export const updateTask = async (req, res) => {
 
         // Check dueDate
         if (updates.dueDate && !validateDueDate(updates.dueDate)) {
+            console.log(`PUT /api/v1/tasks/${id} -> 400 Bad Request`)
             return res.status(400).json({ message: 'Due date should not be less than today' })  
         }
 
@@ -95,7 +102,8 @@ export const updateTask = async (req, res) => {
         if (!updatedTask) {
             return res.status(404).json({ message: 'Task not found' })
         }
-
+        
+        console.log(`PUT /api/v1/tasks/${id} -> 200 OK`)
         res.status(200).json({ message: 'Task updated successfully', updatedTask })
 
     } catch (error) {
@@ -138,7 +146,8 @@ export const deleteTask = async (req, res) => {
         if (!task) {  
             return res.status(404).json({ message: 'Task not found' })
         }
-
+        
+        console.log(`DELETE /api/v1/tasks/${id} -> 200 OK`)
         res.status(200).json({ message: 'Task deleted successfully!' })
     } catch (error) {
         console.log('Error at delete task: ', error.message)

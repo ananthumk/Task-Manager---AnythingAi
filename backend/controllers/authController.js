@@ -17,6 +17,7 @@ export const register = async (req, res) => {
             console.log('User already exists')
             return res.status(409).json({ message: 'User already exists' })
         }
+        console.log('POST /api/v1/login -> User already exists')
 
         // Hashing Password
         const hashedPassword = await bcrypt.hash(password, 10)
@@ -32,7 +33,8 @@ export const register = async (req, res) => {
 
         
         const cleanUser = await User.findById(user._id)
-
+        
+        console.log('POST /api/v1/login -> 200 OK')
         res.status(201).json({
             message: 'User registered successfully!',
             token,
@@ -55,12 +57,16 @@ export const login = async (req, res) => {
         if (!user) {
             return res.status(401).json({ message: 'Invalid credentials' })
         }
+        console.log('POST /apiv1/login -> 401 ERROR:  Invalid credentials')
 
         // Checking password
         const matchPassword = await bcrypt.compare(password, user.password)
         if (!matchPassword) {
             return res.status(402).json({ message: 'Invalid credentials' })
         }
+
+        console.log('POST /api/login -> 401 ERROR:  Invalid credentials')
+
 
         const token = generateToken({ id: user._id, role: user.role })
 
@@ -73,7 +79,9 @@ export const login = async (req, res) => {
             token,
             user: userObj
         });
+        console.log('POST /api/v1/login -> 200')
     } catch (error) {
+        console.log('POST /api/v1/login -> 500 ERROR', error.message)
         res.status(500).json({ message: 'Something went wrong! Try again later' })
         console.log('Error at logging user: ', error.message)
     }

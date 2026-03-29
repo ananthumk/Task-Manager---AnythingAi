@@ -16,7 +16,8 @@ export const getAllUsers = async (req, res) => {
         const users = await User.find(whereCondition)
             .limit(parseInt(limit))
             .skip(parseInt(offset))
-
+        
+        console.log(`GET /api/v1/users -> 200 OK`)
         res.status(200).json({
             total,
             page: parseInt(page),
@@ -34,7 +35,7 @@ export const getAllUsers = async (req, res) => {
 export const getUser = async (req, res) => {
     try {
         const {id} = req.params 
-        const user = User.findById(id)
+        const user = await User.findById(id)
         
         if (!user) {
             return res.status(404).json({message: 'User not found'})
@@ -56,7 +57,8 @@ export const deleteUser = async (req, res) => {
         if (!user) {
             return res.status(404).json({ message: 'User not found' })
         }
-
+        
+        console.log(`DELETE /api/v1/users/${id} -> 200 OK`)
         res.status(200).json({ message: 'User deleted successfully!' })
     } catch (error) {
         console.log('Error at deleting user: ', error.message)

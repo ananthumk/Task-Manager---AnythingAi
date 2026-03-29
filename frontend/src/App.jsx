@@ -12,7 +12,7 @@ import ProtectedRoute from './components/ProtectedRoute'
 function App() {
   const [token, setToken] = useState('')
 
-  const backendUrl = import.meta.env.VITE_API_URL
+   const backendUrl = import.meta.env.VITE_API_URL
 
   useEffect(() => {
     const t = Cookies.get('token')

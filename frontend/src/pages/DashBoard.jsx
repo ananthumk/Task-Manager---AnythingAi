@@ -89,7 +89,7 @@ const DashBoard = () => {
 
         <Header />
 
-        <div className='w-[80%] mx-auto my-10'>
+        <div className='w-[80%] py-10 mx-auto '>
 
           <div className="flex items-center gap-2 flex-wrap sm:gap-5 mx-auto rounded bg-white py-3 px-5">
             <div className="flex flex-col gap-1">
