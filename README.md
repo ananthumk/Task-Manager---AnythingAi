@@ -3,6 +3,10 @@
 A full-stack Task Management application built with React (frontend) and Node.js + Express + MongoDB (backend). Supports user authentication, role-based access control, and full CRUD for tasks and users.
 
 
+# Deployed Links
+Frontend: https://task-manager-anything-ai.vercel.app/
+Backend: https://task-manager-anythingai.onrender.com
+
 ## Tech Stack
 
 ### Frontend
