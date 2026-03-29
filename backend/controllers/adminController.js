@@ -3,31 +3,30 @@ import User from "../models/authModels.js"
 // Get All User
 export const getAllUsers = async (req, res) => {
     try {
-        const {search = '', page = 1, limit = 10} = req.body 
-        
-        const offset = (page - 1) * limit 
+        const { search = '', page = 1, limit = 10 } = req.query 
 
-        const whereCondition = search 
-        ? {
-            name: {
-                [Option.like]: `%${search}%`
-            }
-        } : {}
+        const offset = (page - 1) * limit
 
-        const users = await User.findAndCountAll({
-            where: whereCondition,
-            limit: parseInt(limit),
-            offset: parseInt(offset)
-        })
+       
+        const whereCondition = search
+            ? { name: { $regex: search, $options: 'i' } }
+            : {}
+
+        const total = await User.countDocuments(whereCondition)
+        const users = await User.find(whereCondition)
+            .limit(parseInt(limit))
+            .skip(parseInt(offset))
+
         res.status(200).json({
-            total:users.count,
+            total,
             page: parseInt(page),
-            totalPages: Math.ceil(users.count / limit),
+            totalPages: Math.ceil(total / limit),
             users
         })
+
     } catch (error) {
         console.log('Get all user: ', error.message)
-        res.status(500).json({message: 'Something went wrong! try again later'})
+        res.status(500).json({ message: 'Something went wrong! try again later' })
     }
 }
 
