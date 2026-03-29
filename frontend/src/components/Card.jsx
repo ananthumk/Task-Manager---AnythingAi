@@ -3,6 +3,7 @@ import React from 'react'
 import { useContext } from 'react'
 import { useState } from 'react'
 import AppContext from '../context/AppContext'
+import axios from 'axios'
 
 const Card = ({ task, setEditTask, setUpdatedData, setChanges }) => {
     const [isDeleting, setIsDeleting] = useState(false)
@@ -25,7 +26,7 @@ const Card = ({ task, setEditTask, setUpdatedData, setChanges }) => {
                 setChanges(prev => prev + 1)
             }
         } catch (error) {
-            toast.error(error.response?.data?.message || 'Failed to delete task')
+            alert(error.response?.data?.message || 'Failed to delete task')
         } finally {
             setIsDeleting(false)
         }

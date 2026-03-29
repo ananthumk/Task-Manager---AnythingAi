@@ -80,25 +80,28 @@ export const updateTask = async (req, res) => {
 
         // Check dueDate
         if (updates.dueDate && !validateDueDate(updates.dueDate)) {
-            res.status(400).json({ message: 'Due date should not be less than today' })
+            return res.status(400).json({ message: 'Due date should not be less than today' })  
         }
 
-        const updatedTask = await Task.findOneAndUpdate({
-            _id: id, userId: req.user.id }, updates , {
-            new: true,
-            runValidator: true
-        })
+        const updatedTask = await Task.findOneAndUpdate(
+            { _id: id, userId: req.user.id },
+            updates,
+            {
+                returnDocument: 'after', 
+                runValidators: true       
+            }
+        )
 
-    if (!updatedTask) {
-        return res.status(404).json({ message: 'Task not found' })
+        if (!updatedTask) {
+            return res.status(404).json({ message: 'Task not found' })
+        }
+
+        res.status(200).json({ message: 'Task updated successfully', updatedTask })
+
+    } catch (error) {
+        console.log('Error at update task: ', error.message)
+        res.status(500).json({ message: 'Something went wrong! try again later' })
     }
-
-    res.status(200).json({ message: 'Task updated successfully', updatedTask })
-
-} catch (error) {
-    console.log('Error at update task: ', error.message)
-    res.status(500).json({ message: 'Something went wrong! try again later' })
-}
 }
 
 // Get Task 
@@ -123,20 +126,19 @@ export const getTask = async (req, res) => {
     }
 }
 
-
 // Delete Task 
 export const deleteTask = async (req, res) => {
     try {
         const { id } = req.params
 
-        const task = await Task.findOne({
-            where: { id, userId: req.user.id}
+        const task = await Task.findOneAndDelete({  
+            _id: id, userId: req.user.id
         })
-        if (task) {
+
+        if (!task) {  
             return res.status(404).json({ message: 'Task not found' })
         }
 
-        await task.destroy()
         res.status(200).json({ message: 'Task deleted successfully!' })
     } catch (error) {
         console.log('Error at delete task: ', error.message)

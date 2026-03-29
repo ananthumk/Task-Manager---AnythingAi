@@ -13,7 +13,7 @@ const apiStatus = {
   failure: 'failure'
 };
 
-const EditTask = ({ setEditTask, setChanges}) => {
+const EditTask = ({ setEditTask, setChanges, updateData}) => {
   const [status, setStatus] = useState('')
   const [data, setData] = useState(null)
   const [msg, setMsg] = useState('')
@@ -22,7 +22,8 @@ const EditTask = ({ setEditTask, setChanges}) => {
 
   useEffect(() => {
     setStatus(apiStatus.inProgress)
-  }, [])
+    setData(updateData)
+  }, [updateData])
 
   const handleClose = () => {
     setEditTask(false)
@@ -41,18 +42,22 @@ const EditTask = ({ setEditTask, setChanges}) => {
     setMsg('')
     setStatus(apiStatus.loading)
     try {
-        const response = await axios.patch(`${backendUrl}/api/v1/task`, data, {
+        const response = await axios.patch(`${backendUrl}/api/v1/task/${data._id}`, data, {
             headers: {
                 Authorization: `Bearer ${token}`
             }
         })
-        
+        console.log(response)
         if(response.status === 200) {
            setMsg('Task Updated')
            setStatus(apiStatus.success)
            setChanges(prev => prev + 1)
+           setTimeout(() => {
+             setEditTask(false)
+           }, 2000);
         }
     } catch (error) {
+        console.log(error)
         setMsg('Failed to updated task')
         setStatus(apiStatus.failure)
     }
@@ -95,7 +100,7 @@ const EditTask = ({ setEditTask, setChanges}) => {
 
                     <div className="flex flex-col gap-2">
                             <label className="text-[12px] font-light">DueDate</label>
-                            <input required name="dueDate" value={data?.dueDate} onChange={handleChanges} type="date"
+                            <input name="dueDate" value={data?.dueDate} onChange={handleChanges} type="date"
                              className="p-2 text-[11px] rounded border outline-0 border-gray-300" placeholder="Enter task title" />
 
                         </div>

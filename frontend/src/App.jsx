@@ -7,11 +7,12 @@ import { useEffect, useState } from 'react'
 import Cookies from 'js-cookie'
 import AppContext from './context/AppContext'
 import AdminDashboard from './pages/AdminDashboard'
+import ProtectedRoute from './components/ProtectedRoute'
 
 function App() {
   const [token, setToken] = useState('')
 
-  const backendUrl = 'https://task-manager-anythingai.onrender.com'
+  const backendUrl = import.meta.env.VITE_API_URL
 
   useEffect(() => {
     const t = Cookies.get('token')
@@ -33,8 +34,8 @@ function App() {
       <Routes>
         <Route path='/login' element={<Login />} />
         <Route path='/register' element={<Register />} />
-        <Route path='/' element={<DashBoard />} />
-        <Route path='/admin' element={<AdminDashboard />} />
+        <Route path='/' element={<ProtectedRoute element={<DashBoard />} />} />
+        <Route path='/admin' element={<ProtectedRoute element={<AdminDashboard />} />} />
       </Routes>
     </AppContext.Provider>
   )

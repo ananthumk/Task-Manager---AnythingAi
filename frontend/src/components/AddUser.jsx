@@ -10,7 +10,7 @@ const apiStatus = {
   failure: 'failure'
 };
 
-const AddUser = ({setAddUser}) => {
+const AddUser = ({setAddUser, setChanges}) => {
     const [userInfo, setUserInfo] = useState({
         name: '', email: '', password: '', role: ''
     })
@@ -39,6 +39,7 @@ const AddUser = ({setAddUser}) => {
         if (response.status === 201){
              setStatus(apiStatus.success)
              setMsg('User added successfully')
+             setChanges(prev => prev + 1)
              setTimeout(() => {
                 setAddUser(false)
              }, 2000);
