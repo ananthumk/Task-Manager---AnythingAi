@@ -12,7 +12,7 @@ const validateDueDate = (dueDate) => {
 // Create Task
 export const addTask = async (req, res) => {
     try {
-        const { title, description, status, priority, dueDate } = req.body
+        const { title, description, status = 'pending', priority = 'low', dueDate } = req.body
 
 
 
@@ -39,7 +39,7 @@ export const addTask = async (req, res) => {
 // Get All Tasks
 export const getAllTasks = async (req, res) => {
     try {
-        const {search, priority, status, page} = req.body 
+        const { search = '', priority = '', status = '', page } = req.query 
         
         const pageNum = parseInt(page) || 1 
         const limit = 10 
