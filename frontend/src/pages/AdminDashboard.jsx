@@ -8,6 +8,7 @@ import { useEffect } from 'react'
 import UserTable from '../components/UserTable'
 import { Plus } from 'lucide-react'
 import AddUser from '../components/AddUser'
+import { Oval } from 'react-loader-spinner'
 
 const apiStatus = {
   inProgress: 'in_progress',
@@ -38,6 +39,7 @@ const AdminDashboard = () => {
 
       if (response.status === 201) {
         console.log(response)
+        setUser(response.data.users)
         setStatus(apiStatus.success)
       }
     } catch (error) {
@@ -58,7 +60,7 @@ const AdminDashboard = () => {
         <div className='w-[80%] mx-auto mt-5'>
           <h1 className='text-lg text-black'>List of users</h1>
 
-          {(status === 'loading' && status === 'in_progress') && <div className="w-full flex justify-center items-center mt-20">
+          {(status === 'loading' || status === 'in_progress') && <div className="w-full flex justify-center items-center mt-20">
             <Oval
               height={50}
               width={50}
@@ -81,13 +83,13 @@ const AdminDashboard = () => {
 
         </div>
 
-        <div onClick={() => setAddUser(true)} style={{ zIndex: 1000 }} className="w-10 h-10 cursor-pointer fixed bottom-3 md:bottom-10 right-3 md:right-12 flex justify-center items-center rounded-full bg-blue-800 hover:bg-blue-900">
+        <div onClick={() => setAddUser(true)} style={{ zIndex: addUser ? 0 : 1000 }} className="w-10 h-10 cursor-pointer fixed bottom-3 md:bottom-10 right-3 md:right-12 flex justify-center items-center rounded-full bg-blue-800 hover:bg-blue-900">
           <Plus className="w-5 h-5 text-white" />
         </div>
 
       </div>
 
-    {addUser && <AddUser setAddUser={setAddUser} />}
+      {addUser && <AddUser setAddUser={setAddUser} />}
     </>
   )
 }

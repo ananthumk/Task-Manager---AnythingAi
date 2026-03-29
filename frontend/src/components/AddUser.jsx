@@ -1,7 +1,6 @@
 import React, { useContext, useEffect, useState } from 'react'
 import AppContext from '../context/AppContext';
 import axios from 'axios';
-import { set } from 'mongoose';
 import { X } from 'lucide-react';
 
 const apiStatus = {
@@ -36,10 +35,13 @@ const AddUser = ({setAddUser}) => {
     e.preventDefault()
     setMsg('')
     try {
-        const response = await axios.post(`${backendUrl}/api/v1/register`, userInfo)
+        const response = await axios.post(`${backendUrl}/api/v1/auth/register`, userInfo)
         if (response.status === 201){
              setStatus(apiStatus.success)
              setMsg('User added successfully')
+             setTimeout(() => {
+                setAddUser(false)
+             }, 2000);
         }
     } catch (error) {
         if (error.response) {
@@ -52,8 +54,8 @@ const AddUser = ({setAddUser}) => {
     }
   }
   return (
-    <div className='bg-[rgba(0,0,0,0.5)] w-full min-h-screen flex justify-center items-center'>
-          <div className='border-2 min-w-[340px] border-white flex flex-col gap-3 rounded-md py-6 px-5'>
+    <div className='w-full z-50 min-h-screen fixed top-0 left-0 bg-[rgba(0,0,0,0.5)] flex justify-center items-center' style={{ zIndex: 2000 }}>
+          <div className='border-2 min-w-[340px] bg-white border-white flex flex-col gap-3 rounded-md py-6 px-5'>
             <div className='flex items-center justify-between'>
                 <h2 className='text-xl font-semibold text-black'>Add User</h2>
                 <X onClick={() => setAddUser(false)} className='w-4 h-4' />
@@ -81,7 +83,7 @@ const AddUser = ({setAddUser}) => {
 
                     <div className='flex flex-col'>
                         <label className='text-sm text-[#848482] font-semibold'>Role</label>
-                        <select name='role' onChange={handleSubmit} className='border-2 w-full text-sm font-medium border-[#848482] rounded-sm py-1 px-2'>
+                        <select name='role' onChange={handleUserInfo} className='border-2 w-full text-sm font-medium border-[#848482] rounded-sm py-1 px-2'>
                              <option value='user' className='text-sm py-1 px-2'>User</option>
                              <option value='admin' className='text-sm py-1 px-2'>Admin</option>
                         </select>
@@ -91,7 +93,7 @@ const AddUser = ({setAddUser}) => {
                     <button type='submit' className='py-1 px-2 bg-[#4D5D53] hover:bg-[#4d5b5c] rounded-md mt-3 text-md font-medium text-white cursor-pointer'>
                         Register
                     </button>
-                    <button onClick={() => setAddUser(false)}  className='py-1 px-2 bg-transparent border-2 border-[#4D5D53] hover:bg-[#eef3f4] rounded-md mt-3 text-md font-medium text-white cursor-pointer'>
+                    <button onClick={() => setAddUser(false)}  className='py-1 text-[#4D5D53] px-2 bg-transparent border-2 border-[#4D5D53] hover:bg-[#eef3f4] rounded-md mt-3 text-md font-medium cursor-pointer'>
                         Cancel
                     </button>
                     </div>
@@ -99,7 +101,7 @@ const AddUser = ({setAddUser}) => {
 
                 </form>
 
-                {errMsg && <p className='text-sm text-center text-red-500 font-semibold'>{errMsg}</p>}
+                {msg && <p className={`text-sm text-center ${status === 'failure' ? 'text-red-500' : 'text-green-500' } font-semibold`}>{msg}</p>}
 
             </div>
     </div>

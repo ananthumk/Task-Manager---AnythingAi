@@ -30,7 +30,11 @@ export const register = async (req, res) => {
 
         const token = generateToken({ id: user._id, role: user.role })
 
-        res.status(201).json({ message: 'User created successfully!' }, token, user)
+        res.status(201).json({
+            message: 'User logged In successfully!',
+            token,
+            user
+        });
 
     } catch (error) {
         res.status(500).json({ message: 'Something went wrong! Try again later' })

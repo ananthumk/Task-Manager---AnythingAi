@@ -41,8 +41,9 @@ const Register = () => {
                 setErrMsg(null)
                 if (response.data.user.role === 'user') {
                     navigate('/')
+                } else {
+                    navigate('/admin')
                 }
-                navigate('/admin')
             }
         } catch (error) {
             if (error.response) {

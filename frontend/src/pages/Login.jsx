@@ -33,7 +33,7 @@ const Login = () => {
         e.preventDefault()
         setErrMsg(null)
         try {
-            const url = '${backendUrl}/api/v1/auth/login'
+            const url = `${backendUrl}/api/v1/auth/login`
             const response = await axios.post(url, userInfo)
             if (response.status === 200) {
                 console.log(response.data)
@@ -42,9 +42,9 @@ const Login = () => {
                 setErrMsg(null)
                 if (response.data.user.role === 'user') {
                     navigate('/')
+                } else {
+                    navigate('/admin')
                 }
-                navigate('/admin')
-
             }
         } catch (error) {
             if (error.response) {

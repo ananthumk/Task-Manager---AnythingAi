@@ -11,7 +11,7 @@ import AdminDashboard from './pages/AdminDashboard'
 function App() {
   const [token, setToken] = useState('')
 
-  const backendUrl = import.meta.env.VITE_API_URL
+  const backendUrl = 'https://task-manager-anythingai.onrender.com'
 
   useEffect(() => {
     const t = Cookies.get('token')
@@ -21,7 +21,7 @@ function App() {
   const updateToken = (newToken) => {
     setToken(newToken)
     if (newToken) {
-      Cookies.get('token', newToken, {expires: 7})
+      Cookies.set('token', newToken, {expires: 7})
     } else {
       Cookies.remove('token')
     }
