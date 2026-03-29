@@ -30,10 +30,13 @@ export const register = async (req, res) => {
 
         const token = generateToken({ id: user._id, role: user.role })
 
+        
+        const cleanUser = await User.findById(user._id)
+
         res.status(201).json({
-            message: 'User logged In successfully!',
+            message: 'User registered successfully!',
             token,
-            user
+            user: cleanUser
         });
 
     } catch (error) {
